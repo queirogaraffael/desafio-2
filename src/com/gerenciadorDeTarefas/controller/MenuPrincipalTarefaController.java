@@ -46,11 +46,11 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.MARCARCONCLUIDA):
-					// implementar
+					marcarTarefaComoConcluida(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.DESMARCARCONCLUIDA):
-					// implementar
+					desmarcarTarefaComoConcluida(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.MODIFICAR):
@@ -66,7 +66,7 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.SAIR):
-					// implementar
+					JOptionPane.showMessageDialog(null, "Fim do programa");
 					break;
 
 				}
@@ -82,34 +82,42 @@ public class MenuPrincipalTarefaController {
 	private void adicionaTarefa(Set<Tarefa> tarefas) {
 
 		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
-		String descricao = JOptionPane.showInputDialog("Descricao da tarefa: ");
 
-		Object[] opcoes = { "Sim", "Nao" };
+		if (TarefaService.verificaSeJaExisteTarefaPeloTitulo(tarefas, titulo)) {
 
-		int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar data a tarefa ?\n1. Sim\n2. Nao", "Data",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+			JOptionPane.showMessageDialog(null, "Tarefa ja existe. Tente modificar ou remover.");
 
-		Tarefa tarefa = new Tarefa();
-		tarefa.setTitulo(titulo);
-		tarefa.setDescricao(descricao);
-		tarefa.setStatusConcluida(false);
+		} else {
 
-		if (opcaoData == 0) {
-			String formatoData = "dd/MM/yyyy";
-			String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-			boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+			String descricao = JOptionPane.showInputDialog("Descricao da tarefa: ");
 
-			while (!formatoAprovado) {
-				dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+			Object[] opcoes = { "Sim", "Nao" };
+
+			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar data a tarefa ?\n1. Sim\n2. Nao",
+					"Data", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+			Tarefa tarefa = new Tarefa();
+			tarefa.setTitulo(titulo);
+			tarefa.setDescricao(descricao);
+			tarefa.setStatusConcluida(false);
+
+			if (opcaoData == 0) {
+				String formatoData = "dd/MM/yyyy";
+				String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+				boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+
+				while (!formatoAprovado) {
+					dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+				}
+				LocalDate localDate = ManipulacaoData.retornaLocalDate(dataString);
+				tarefa.setData(localDate);
+
 			}
-			LocalDate localDate = ManipulacaoData.retornaLocalDate(dataString);
-			tarefa.setData(localDate);
 
+			tarefas.add(tarefa);
+
+			JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 		}
-
-		tarefas.add(tarefa);
-
-		JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 
 	}
 
@@ -133,6 +141,39 @@ public class MenuPrincipalTarefaController {
 			JOptionPane.showMessageDialog(null, "Lista de tarefas concluidas vazia.");
 		} else {
 			JOptionPane.showMessageDialog(null, relatorioTarefasConcluidas);
+		}
+
+	}
+
+	private void marcarTarefaComoConcluida(Set<Tarefa> tarefas) {
+
+		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
+
+		Tarefa tarefa = TarefaService.retornaTarefaPeloTitulo(tarefas, titulo);
+
+		if (tarefa == null) {
+			JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+		} else {
+
+			tarefa.setStatusConcluida(true);
+			JOptionPane.showMessageDialog(null, "Tarefa marcada como conluida!");
+		}
+
+	}
+
+	private void desmarcarTarefaComoConcluida(Set<Tarefa> tarefas) {
+
+		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
+
+		Tarefa tarefa = TarefaService.retornaTarefaPeloTitulo(tarefas, titulo);
+
+		if (tarefa == null) {
+			JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+		} else {
+
+			tarefa.setStatusConcluida(false);
+			JOptionPane.showMessageDialog(null, "Tarefa desmarcada como conluida!");
+
 		}
 
 	}
