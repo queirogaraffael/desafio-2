@@ -48,10 +48,13 @@ public class Tarefa {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		if (data == null) {
-			return sb.append(titulo).append("\n").append(descricao).toString();
+		if (data != null) {
+
+			return sb.append("Titulo: ").append(titulo).append("\n").append("Descricao: ").append(descricao)
+					.append("\n").append("Data: ").append(data.toString()).toString();
+
 		} else {
-			return sb.append(titulo).append("\n").append(descricao).append("\n").append(data.toString()).toString();
+			return sb.append("Titulo: ").append(titulo).append("\n").append("Descricao: ").append(descricao).toString();
 		}
 
 	}
@@ -72,6 +75,5 @@ public class Tarefa {
 		Tarefa other = (Tarefa) obj;
 		return Objects.equals(titulo, other.titulo);
 	}
-	
 
 }
