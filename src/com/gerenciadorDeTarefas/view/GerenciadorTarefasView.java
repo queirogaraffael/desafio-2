@@ -11,13 +11,21 @@ public class GerenciadorTarefasView {
 		menu.append("Bem-vindo ao Gerenciador de Tarefas\n\n");
 		menu.append("Menu:\n");
 		menu.append("1. Adicionar Tarefa\n");
-		menu.append("2. Visualizar tarefas\n"); // implementar
-		menu.append("3. Visualizar Tarefas nao concluidas\n"); // booleano e data posterior a atual // implementar
+		
+		menu.append("2. Visualizar Tarefas nao concluidas\n"); // booleano e data posterior a atual 
+		menu.append("3. Visualizar tarefas concluidas\n"); // testar
+	
+		
+		
 		menu.append("4. Marcar tarefa como concluida\n"); // implementar
 		menu.append("5. Desmarcar tarefa como concluida\n"); // implementar
+		
 		menu.append("6. Modificar tarefa\n"); // apenas nao concluidas // opcoes de todos atributos // implementar
+		
 		menu.append("7. Ordenar por\n"); // data// adicionada // implementar
+		
 		menu.append("8. Remover Tarefa\n"); // lista e seleciona // implementar
+		
 		menu.append("9. Sair");
 		menu.append("\nEscolha uma opcao: ");
 

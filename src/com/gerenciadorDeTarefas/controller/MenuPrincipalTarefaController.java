@@ -37,12 +37,12 @@ public class MenuPrincipalTarefaController {
 					adicionaTarefa(tarefas);
 					break;
 
-				case (ConstantesMenuPrincipal.VISUALIZARCONCLUIDA):
-					visualizarTarefas(tarefas);
+				case (ConstantesMenuPrincipal.VISUALIZARNAOCONCLUIDA):
+					visualizarTarefasNaoConcluidas(tarefas);
 					break;
 
-				case (ConstantesMenuPrincipal.VISUALIZARNAOCONCLUIDA):
-					// implementar
+				case (ConstantesMenuPrincipal.VISUALIZARCONCLUIDA):
+					visualizarTarefasConcluidas(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.MARCARCONCLUIDA):
@@ -79,7 +79,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void adicionaTarefa(Set<Tarefa> tarefas2) {
+	private void adicionaTarefa(Set<Tarefa> tarefas) {
 
 		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
 		String descricao = JOptionPane.showInputDialog("Descricao da tarefa: ");
@@ -107,15 +107,23 @@ public class MenuPrincipalTarefaController {
 
 		}
 
-		tarefas2.add(tarefa);
+		tarefas.add(tarefa);
 
 		JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 
 	}
 
-	private void visualizarTarefas(Set<Tarefa> tarefas) {
+	private void visualizarTarefasNaoConcluidas(Set<Tarefa> tarefas) {
 
-		String relatorioTarefas = TarefaService.geraRelatorioTarefas(tarefas);
+		String relatorioTarefas = TarefaService.geraRelatorioTarefasNaoConlcuidas(tarefas);
+
+		JOptionPane.showMessageDialog(null, relatorioTarefas);
+
+	}
+
+	private void visualizarTarefasConcluidas(Set<Tarefa> tarefas) {
+
+		String relatorioTarefas = TarefaService.geraRelatorioTarefasConlcuidas(tarefas);
 
 		JOptionPane.showMessageDialog(null, relatorioTarefas);
 
