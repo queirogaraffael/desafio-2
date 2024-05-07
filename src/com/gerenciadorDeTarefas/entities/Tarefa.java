@@ -1,47 +1,46 @@
 package com.gerenciadorDeTarefas.entities;
 
-import java.util.Objects;
+import java.time.LocalDate;
 
 public class Tarefa {
-	private String tarefa;
+	private String titulo;
+	private String descricao;
+	private LocalDate data;
+	private Boolean statusConcluida;
 
 	public Tarefa() {
 	}
 
-	public Tarefa(String tarefa) {
-		this.tarefa = tarefa;
+	public String getTitulo() {
+		return titulo;
 	}
 
-	public String getTarefa() {
-		return tarefa;
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
-	public void setTarefa(String tarefa) {
-		this.tarefa = tarefa;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(tarefa);
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tarefa other = (Tarefa) obj;
-		return Objects.equals(tarefa, other.tarefa);
+	public LocalDate getData() {
+		return data;
 	}
 
-	@Override
-	public String toString() {
-		return tarefa;
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
-	
-	
+
+	public Boolean getStatusConcluida() {
+		return statusConcluida;
+	}
+
+	public void setStatusConcluida(Boolean statusConcluida) {
+		this.statusConcluida = statusConcluida;
+	}
 
 }
