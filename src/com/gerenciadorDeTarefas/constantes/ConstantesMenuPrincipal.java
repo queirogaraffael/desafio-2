@@ -1,13 +1,13 @@
 package com.gerenciadorDeTarefas.constantes;
 
 public class ConstantesMenuPrincipal {
-	public static final int ADICIONAR = 1;
-	public static final int VISUALIZARNAOCONCLUIDA = 2;
-	public static final int VISUALIZARCONCLUIDA = 3;
-	public static final int MARCARCONCLUIDA = 4;
-	public static final int DESMARCARCONCLUIDA = 5;
-	public static final int MODIFICAR = 6;
-	public static final int ORDERNAR = 7;
-	public static final int REMOVER = 8;
-	public static final int SAIR = 9;
+	public static final String ADICIONAR = "Adicionar Tarefa";
+	public static final String VISUALIZARNAOCONCLUIDA = "Visualizar Tarefas nao concluidas";
+	public static final String VISUALIZARCONCLUIDA = "Visualizar tarefas concluidas";
+	public static final String MARCARCONCLUIDA = "Marcar tarefa como concluida";
+	public static final String DESMARCARCONCLUIDA = "Desmarcar tarefa como concluida";
+	public static final String MODIFICAR = "Modificar tarefa";
+	public static final String ORDERNAR = "Ordenar por";
+	public static final String REMOVER = "Remover Tarefa";
+	public static final String SAIR = "Sair";
 }

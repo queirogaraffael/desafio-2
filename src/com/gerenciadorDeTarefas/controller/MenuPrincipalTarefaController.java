@@ -23,14 +23,13 @@ public class MenuPrincipalTarefaController {
 
 	public void exibirMenuPrincipal() {
 
-		int opcaoMenuPrincipal = 0;
+		String opcaoMenuPrincipal = "";
 
 		do {
 
 			try {
 
-				opcaoMenuPrincipal = Integer
-						.parseInt(JOptionPane.showInputDialog(GerenciadorTarefasView.menuPrincipalView()));
+				opcaoMenuPrincipal = GerenciadorTarefasView.menuPrincipalView();
 
 				switch (opcaoMenuPrincipal) {
 
