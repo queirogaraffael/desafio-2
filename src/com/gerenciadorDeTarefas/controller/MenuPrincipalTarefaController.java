@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import com.gerenciadorDeTarefas.constantes.ConstantesMenuPrincipal;
 import com.gerenciadorDeTarefas.entities.Tarefa;
+import com.gerenciadorDeTarefas.services.TarefaService;
 import com.gerenciadorDeTarefas.util.ManipulacaoData;
 import com.gerenciadorDeTarefas.view.GerenciadorTarefasView;
 
@@ -37,7 +38,7 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.VISUALIZARCONCLUIDA):
-					// implementar
+					visualizarTarefas(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.VISUALIZARNAOCONCLUIDA):
@@ -93,7 +94,7 @@ public class MenuPrincipalTarefaController {
 		tarefa.setDescricao(descricao);
 		tarefa.setStatusConcluida(false);
 
-		if (opcaoData == 1) {
+		if (opcaoData == 0) {
 			String formatoData = "dd/MM/yyyy";
 			String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
 			boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
@@ -107,6 +108,16 @@ public class MenuPrincipalTarefaController {
 		}
 
 		tarefas2.add(tarefa);
+
+		JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
+
+	}
+
+	private void visualizarTarefas(Set<Tarefa> tarefas) {
+
+		String relatorioTarefas = TarefaService.geraRelatorioTarefas(tarefas);
+
+		JOptionPane.showMessageDialog(null, relatorioTarefas);
 
 	}
 

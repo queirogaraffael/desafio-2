@@ -43,4 +43,16 @@ public class Tarefa {
 		this.statusConcluida = statusConcluida;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		if (data == null) {
+			return sb.append(titulo).append("\n").append(descricao).toString();
+		} else {
+			return sb.append(titulo).append("\n").append(descricao).append("\n").append(data.toString()).toString();
+		}
+
+	}
+
 }
