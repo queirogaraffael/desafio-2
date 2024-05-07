@@ -62,7 +62,7 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.REMOVER):
-					// implementar
+					removerTarefa(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.SAIR):
@@ -115,18 +115,32 @@ public class MenuPrincipalTarefaController {
 
 	private void visualizarTarefasNaoConcluidas(Set<Tarefa> tarefas) {
 
-		String relatorioTarefas = TarefaService.geraRelatorioTarefasNaoConlcuidas(tarefas);
+		String relatorioTarefasNaoConcluidas = TarefaService.geraRelatorioTarefasNaoConlcuidas(tarefas);
 
-		JOptionPane.showMessageDialog(null, relatorioTarefas);
+		if (relatorioTarefasNaoConcluidas.equals("")) {
+			JOptionPane.showMessageDialog(null, "Lista de tarefas nao concluidas vazia.");
+		} else {
+			JOptionPane.showMessageDialog(null, relatorioTarefasNaoConcluidas);
+		}
 
 	}
 
 	private void visualizarTarefasConcluidas(Set<Tarefa> tarefas) {
 
-		String relatorioTarefas = TarefaService.geraRelatorioTarefasConlcuidas(tarefas);
+		String relatorioTarefasConcluidas = TarefaService.geraRelatorioTarefasConlcuidas(tarefas);
 
-		JOptionPane.showMessageDialog(null, relatorioTarefas);
+		if (relatorioTarefasConcluidas.equals("")) {
+			JOptionPane.showMessageDialog(null, "Lista de tarefas concluidas vazia.");
+		} else {
+			JOptionPane.showMessageDialog(null, relatorioTarefasConcluidas);
+		}
 
+	}
+
+	private void removerTarefa(Set<Tarefa> tarefas) {
+		String tituloTarefaParaRemover = JOptionPane.showInputDialog("Titulo da tarefa que voce deseja remover: ");
+
+		TarefaService.removeTarefa(tarefas, tituloTarefaParaRemover);
 	}
 
 }

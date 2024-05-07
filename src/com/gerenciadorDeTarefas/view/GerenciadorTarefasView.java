@@ -6,14 +6,13 @@ public class GerenciadorTarefasView {
 		StringBuilder menu = new StringBuilder();
 		// implementar depois com hora
 		// adiciona um metodo que pega a data e avalia se ja foi concluido ou nao e
-		// modifica o booleano
+		// modifica o booleano // no inicio
 		// analisar a criacao de categorias para prioridade
 		menu.append("Bem-vindo ao Gerenciador de Tarefas\n\n");
 		menu.append("Menu:\n");
-		menu.append("1. Adicionar Tarefa\n");
-		
-		menu.append("2. Visualizar Tarefas nao concluidas\n"); // booleano e data posterior a atual 
-		menu.append("3. Visualizar tarefas concluidas\n"); // testar
+		menu.append("1. Adicionar Tarefa\n"); // alerta se ja tiver uma com o mesmo nome
+		menu.append("2. Visualizar Tarefas nao concluidas\n"); // sem tarefas
+		menu.append("3. Visualizar tarefas concluidas\n"); // sem tarefas 
 	
 		
 		

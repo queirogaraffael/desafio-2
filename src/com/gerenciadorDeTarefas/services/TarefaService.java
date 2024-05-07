@@ -32,6 +32,10 @@ public class TarefaService {
 		return sb.toString();
 	}
 	
+	public static void removeTarefa(Set<Tarefa> tarefas, String tituloTarefaParaRemover) {
+		tarefas.removeIf(p -> p.getTitulo().equals(tituloTarefaParaRemover));
+	}
+	
 	
 
 }
