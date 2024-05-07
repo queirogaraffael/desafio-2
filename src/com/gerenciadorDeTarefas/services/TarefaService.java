@@ -1,5 +1,6 @@
 package com.gerenciadorDeTarefas.services;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import com.gerenciadorDeTarefas.entities.Tarefa;
@@ -50,6 +51,33 @@ public class TarefaService {
 
 		for (Tarefa tarefa : tarefas) {
 			if (tarefa.getTitulo().equals(tituloTarefa)) {
+				return tarefa;
+			}
+		}
+
+		return null;
+
+	}
+
+	
+	public static void modificaTituloTarefa(Tarefa tarefa, String novoTitulo) {
+		tarefa.setTitulo(novoTitulo);
+
+	}
+
+	public static void modificaDescricaoTarefa(Tarefa tarefa, String novoDescricao) {
+		tarefa.setDescricao(novoDescricao);
+
+	}
+
+	public static void modificaDataTarefa(Tarefa tarefa, LocalDate data) {
+		tarefa.setData(data);
+	}
+
+	public static Tarefa retornaTarefaNaoConcluidaPeloTitulo(Set<Tarefa> tarefas, String titulo) {
+
+		for (Tarefa tarefa : tarefas) {
+			if (tarefa.getStatusConcluida() == false && tarefa.getTitulo().equals(titulo)) {
 				return tarefa;
 			}
 		}

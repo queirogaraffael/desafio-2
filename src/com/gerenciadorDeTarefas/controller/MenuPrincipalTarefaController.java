@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import com.gerenciadorDeTarefas.constantes.ConstantesMenuPrincipal;
+import com.gerenciadorDeTarefas.constantes.ConstantesOpcaoModificarTarefa;
 import com.gerenciadorDeTarefas.entities.Tarefa;
 import com.gerenciadorDeTarefas.services.TarefaService;
 import com.gerenciadorDeTarefas.util.ManipulacaoData;
@@ -54,7 +55,7 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.MODIFICAR):
-					// implementar
+					modificaTarefa(tarefas);
 					break;
 
 				case (ConstantesMenuPrincipal.ORDERNAR):
@@ -93,8 +94,8 @@ public class MenuPrincipalTarefaController {
 
 			Object[] opcoes = { "Sim", "Nao" };
 
-			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar data a tarefa ?\n1. Sim\n2. Nao",
-					"Data", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar data na tarefa ?", "Data",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
 			Tarefa tarefa = new Tarefa();
 			tarefa.setTitulo(titulo);
@@ -107,7 +108,9 @@ public class MenuPrincipalTarefaController {
 				boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
 
 				while (!formatoAprovado) {
+					JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
 					dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+					formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
 				}
 				LocalDate localDate = ManipulacaoData.retornaLocalDate(dataString);
 				tarefa.setData(localDate);
@@ -173,6 +176,52 @@ public class MenuPrincipalTarefaController {
 
 			tarefa.setStatusConcluida(false);
 			JOptionPane.showMessageDialog(null, "Tarefa desmarcada como conluida!");
+
+		}
+
+	}
+
+	public void modificaTarefa(Set<Tarefa> tarefas) {
+		Object[] opcoes = { "Titulo", "Descricao", "Data", "Voltar para o menu principal" };
+
+		int opcaoModificar = JOptionPane.showOptionDialog(null, "Deseja modificar qual campo ?", "Modificar",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+		if (opcaoModificar != ConstantesOpcaoModificarTarefa.VOLTAR) {
+
+			String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
+
+			Tarefa tarefaParaModificacao = TarefaService.retornaTarefaNaoConcluidaPeloTitulo(tarefas, titulo);
+
+			if (tarefaParaModificacao != null) {
+
+				if (opcaoModificar == ConstantesOpcaoModificarTarefa.TITULO) {
+					String novoTitulo = JOptionPane.showInputDialog("Digite o novo titulo da tarefa: ");
+					TarefaService.modificaTituloTarefa(tarefaParaModificacao, novoTitulo);
+				} else if (opcaoModificar == ConstantesOpcaoModificarTarefa.DESCRICAO) {
+					String novaDescricao = JOptionPane.showInputDialog("Digite a nova descricao da tarefa: ");
+					TarefaService.modificaDescricaoTarefa(tarefaParaModificacao, novaDescricao);
+				} else if (opcaoModificar == ConstantesOpcaoModificarTarefa.DATA) {
+					String formatoData = "dd/MM/yyyy";
+					String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+					boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+
+					while (!formatoAprovado) {
+						JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
+						dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
+						formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+					}
+					LocalDate localDate = ManipulacaoData.retornaLocalDate(dataString);
+
+					TarefaService.modificaDataTarefa(tarefaParaModificacao, localDate);
+
+				}
+				JOptionPane.showMessageDialog(null, "Modificacao feita com sucesso!");
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Tarefa nao encontrada para modificacao.");
+
+			}
 
 		}
 
