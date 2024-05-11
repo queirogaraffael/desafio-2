@@ -13,6 +13,9 @@ import com.gerenciadorDeTarefas.services.TarefaService;
 import com.gerenciadorDeTarefas.util.ManipulacaoData;
 import com.gerenciadorDeTarefas.view.GerenciadorTarefasView;
 
+import MongoDB.MongoDBConnection;
+import MongoDB.TarefaDAO;
+
 public class MenuPrincipalTarefaController {
 
 	private Set<Tarefa> tarefas;
@@ -28,7 +31,6 @@ public class MenuPrincipalTarefaController {
 		do {
 
 			try {
-
 				opcaoMenuPrincipal = GerenciadorTarefasView.menuPrincipalView();
 
 				switch (opcaoMenuPrincipal) {
@@ -66,16 +68,14 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.SAIR):
-					JOptionPane.showMessageDialog(null, "Fim do programa");
-					break;
+					MongoDBConnection.close();
 
 				}
-
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(null, "Entre com um valor valor numerico associado a uma opcao!");
+			} catch (NumberFormatException erro) {
+				JOptionPane.showMessageDialog(null, "Valor invalido");
 			}
 
-		} while (opcaoMenuPrincipal != ConstantesMenuPrincipal.SAIR);
+		} while (!opcaoMenuPrincipal.equals(ConstantesMenuPrincipal.SAIR));
 
 	}
 
@@ -116,7 +116,7 @@ public class MenuPrincipalTarefaController {
 
 			}
 
-			tarefas.add(tarefa);
+			TarefaDAO.inserirTarefa(tarefa);
 
 			JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 		}

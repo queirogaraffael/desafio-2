@@ -3,13 +3,25 @@ package com.gerenciadorDeTarefas.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.bson.types.ObjectId;
+
 public class Tarefa {
+
+	private ObjectId id;
 	private String titulo;
 	private String descricao;
 	private LocalDate data;
 	private Boolean statusConcluida;
 
 	public Tarefa() {
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	public String getTitulo() {
