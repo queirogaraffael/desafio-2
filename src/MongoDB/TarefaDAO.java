@@ -29,5 +29,11 @@ public class TarefaDAO {
 		collection.insertOne(document);
 
 	}
+	
+	
+	// metodo de criar
+	// metodo de remover (pelo id)
+	// metodo de visualizar (por demanda talvez ?)
+	
 
 }

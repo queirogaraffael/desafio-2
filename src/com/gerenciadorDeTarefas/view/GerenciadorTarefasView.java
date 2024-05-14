@@ -7,8 +7,6 @@ public class GerenciadorTarefasView {
 	public static String menuPrincipalView() {
 
 		// implementa data de modificacao
-		// conexao com banco de dados(mongodb)
-		// metodo que separa as tarefas concluidas e nao concluidas (por data e marcada)
 		// no inicio // analizar
 		// implementar Ordenar por // // data// adicionada
 
