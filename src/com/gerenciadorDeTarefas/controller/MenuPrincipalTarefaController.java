@@ -1,27 +1,26 @@
 package com.gerenciadorDeTarefas.controller;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import com.gerenciadorDeTarefas.constantes.ConstantesMenuPrincipal;
-import com.gerenciadorDeTarefas.constantes.ConstantesOpcaoModificarTarefa;
-import com.gerenciadorDeTarefas.entities.Tarefa;
+import com.gerenciadorDeTarefas.MongoDB.MongoDBConnection;
+import com.gerenciadorDeTarefas.commons.constantes.ConstantesMenuPrincipal;
+import com.gerenciadorDeTarefas.commons.constantes.ConstantesOpcaoModificarTarefa;
+import com.gerenciadorDeTarefas.commons.util.ManipulacaoData;
+import com.gerenciadorDeTarefas.model.dao.DaoFactory;
+import com.gerenciadorDeTarefas.model.dao.TarefaDao;
+import com.gerenciadorDeTarefas.model.entities.Tarefa;
 import com.gerenciadorDeTarefas.services.TarefaService;
-import com.gerenciadorDeTarefas.util.ManipulacaoData;
 import com.gerenciadorDeTarefas.view.GerenciadorTarefasView;
-
-import MongoDB.MongoDBConnection;
-import MongoDB.TarefaDAO;
 
 public class MenuPrincipalTarefaController {
 
-	private Set<Tarefa> tarefas;
+	private TarefaDao tarefaDao;
 
 	public MenuPrincipalTarefaController() {
-		tarefas = new HashSet<>();
+		this.tarefaDao = DaoFactory.createMedicoDao();
+
 	}
 
 	public void exibirMenuPrincipal() {
@@ -36,27 +35,31 @@ public class MenuPrincipalTarefaController {
 				switch (opcaoMenuPrincipal) {
 
 				case (ConstantesMenuPrincipal.ADICIONAR):
-					adicionaTarefa(tarefas);
+					adicionaTarefa();
 					break;
 
-				case (ConstantesMenuPrincipal.VISUALIZARNAOCONCLUIDA):
-					visualizarTarefasNaoConcluidas(tarefas);
+				case (ConstantesMenuPrincipal.VISUALIZA_TAREFA_PELO_ID):
+					visualizaTarefaPeloId();
 					break;
 
-				case (ConstantesMenuPrincipal.VISUALIZARCONCLUIDA):
-					visualizarTarefasConcluidas(tarefas);
+				case (ConstantesMenuPrincipal.VISUALIZAR_NAO_CONCLUIDA):
+					visualizaTarefasNaoConcluidas();
 					break;
 
-				case (ConstantesMenuPrincipal.MARCARCONCLUIDA):
-					marcarTarefaComoConcluida(tarefas);
+				case (ConstantesMenuPrincipal.VISUALIZAR_CONCLUIDA):
+					visualizaTarefasConcluidas();
 					break;
 
-				case (ConstantesMenuPrincipal.DESMARCARCONCLUIDA):
-					desmarcarTarefaComoConcluida(tarefas);
+				case (ConstantesMenuPrincipal.MARCAR_CONCLUIDA):
+					marcaTarefaComoConcluida();
+					break;
+
+				case (ConstantesMenuPrincipal.DESMARCAR_CONCLUIDA):
+					desmarcaTarefaComoConcluida();
 					break;
 
 				case (ConstantesMenuPrincipal.MODIFICAR):
-					modificaTarefa(tarefas);
+					modificaTarefa();
 					break;
 
 				case (ConstantesMenuPrincipal.ORDERNAR):
@@ -64,7 +67,7 @@ public class MenuPrincipalTarefaController {
 					break;
 
 				case (ConstantesMenuPrincipal.REMOVER):
-					removerTarefa(tarefas);
+					removeTarefa();
 					break;
 
 				case (ConstantesMenuPrincipal.SAIR):
@@ -79,7 +82,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void adicionaTarefa(Set<Tarefa> tarefas) {
+	private void adicionaTarefa() {
 
 		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
 
@@ -116,14 +119,19 @@ public class MenuPrincipalTarefaController {
 
 			}
 
-			TarefaDAO.inserirTarefa(tarefa);
+			// adicionar metodo aqui
 
 			JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 		}
 
 	}
 
-	private void visualizarTarefasNaoConcluidas(Set<Tarefa> tarefas) {
+	private void visualizaTarefaPeloId() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void visualizaTarefasNaoConcluidas() {
 
 		String relatorioTarefasNaoConcluidas = TarefaService.geraRelatorioTarefasNaoConlcuidas(tarefas);
 
@@ -135,7 +143,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void visualizarTarefasConcluidas(Set<Tarefa> tarefas) {
+	private void visualizaTarefasConcluidas() {
 
 		String relatorioTarefasConcluidas = TarefaService.geraRelatorioTarefasConlcuidas(tarefas);
 
@@ -147,7 +155,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void marcarTarefaComoConcluida(Set<Tarefa> tarefas) {
+	private void marcaTarefaComoConcluida() {
 
 		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
 
@@ -163,7 +171,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void desmarcarTarefaComoConcluida(Set<Tarefa> tarefas) {
+	private void desmarcaTarefaComoConcluida() {
 
 		String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
 
@@ -180,7 +188,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	public void modificaTarefa(Set<Tarefa> tarefas) {
+	public void modificaTarefa() {
 		Object[] opcoes = { "Titulo", "Descricao", "Data", "Voltar para o menu principal" };
 
 		int opcaoModificar = JOptionPane.showOptionDialog(null, "Deseja modificar qual campo ?", "Modificar",
@@ -226,7 +234,7 @@ public class MenuPrincipalTarefaController {
 
 	}
 
-	private void removerTarefa(Set<Tarefa> tarefas) {
+	private void removeTarefa() {
 		String tituloTarefaParaRemover = JOptionPane.showInputDialog("Titulo da tarefa que voce deseja remover: ");
 
 		TarefaService.removeTarefa(tarefas, tituloTarefaParaRemover);

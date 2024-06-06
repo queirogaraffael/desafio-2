@@ -6,11 +6,7 @@ public class GerenciadorTarefasView {
 
 	public static String menuPrincipalView() {
 
-		// implementa data de modificacao
-		// no inicio // analizar
-		// implementar Ordenar por // // data// adicionada
-
-		Object[] opcoesMenu = { "Adicionar Tarefa", "Visualizar Tarefas nao concluidas",
+		Object[] opcoesMenu = { "Adicionar Tarefa", "Visualizar tarefa pelo Id", "Visualizar Tarefas nao concluidas",
 				"Visualizar tarefas concluidas", "Marcar tarefa como concluida", "Desmarcar tarefa como concluida",
 				"Modificar tarefa", "Ordenar por", "Remover Tarefa", "Sair" };
 
@@ -19,7 +15,7 @@ public class GerenciadorTarefasView {
 
 		if (opcaoSelecionada != null) {
 			return opcaoSelecionada.toString();
-		}else {
+		} else {
 			return "";
 		}
 

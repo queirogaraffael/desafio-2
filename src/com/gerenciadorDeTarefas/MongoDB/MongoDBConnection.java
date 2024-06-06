@@ -1,4 +1,4 @@
-package MongoDB;
+package com.gerenciadorDeTarefas.MongoDB;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
@@ -18,7 +18,6 @@ public class MongoDBConnection {
 	public static void close() {
 		if (mongoClient != null) {
 			mongoClient.close();
-			mongoClient = null;
 		}
 	}
 

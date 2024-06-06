@@ -1,5 +1,5 @@
 # Gerenciador de Tarefas
-O Gerenciador de Tarefas é um programa desenvolvido em Java que permite aos usuários adicionar, visualizar, modificar, marcar como concluída, desmarcar como concluída, ordenar e remover tarefas. Utilizando o MongoDB como banco de dados para armazenar as tarefas, o programa oferece uma interface gráfica simples e intuitiva para facilitar o gerenciamento de suas atividades diárias.
+O Gerenciador de Tarefas é um programa desenvolvido em Java com foco mais no back-end em que permite aos usuários adicionar, visualizar, modificar, marcar como concluída, desmarcar como concluída, ordenar e remover tarefas. Utilizando o MongoDB como banco de dados para armazenar as tarefas, o programa oferece uma interface gráfica simples e intuitiva para facilitar o gerenciamento de suas atividades diárias.
 
 ## Pré-requisitos
 
@@ -35,4 +35,4 @@ O Gerenciador de Tarefas segue o padrão de arquitetura Modelo-Visão-Controlado
 Contribuições são bem-vindas! Sinta-se à vontade para enviar pull requests, relatar problemas ou propor novos recursos.
 
 ## Licença
-Este projeto está licenciado sob a Licença MIT.
+Este projeto está licenciado sob a [Licença MIT](https://github.com/queirogaraffael/task-manager-mongodb/blob/main/LICENSE).

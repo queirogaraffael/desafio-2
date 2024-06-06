@@ -1,4 +1,4 @@
-package com.gerenciadorDeTarefas.constantes;
+package com.gerenciadorDeTarefas.commons.constantes;
 
 public class ConstantesOpcaoModificarTarefa {
 

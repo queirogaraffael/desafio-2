@@ -1,4 +1,4 @@
-package com.gerenciadorDeTarefas.entities;
+package com.gerenciadorDeTarefas.model.entities;
 
 import java.time.LocalDate;
 import java.util.Objects;

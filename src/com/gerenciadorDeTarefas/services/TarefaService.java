@@ -3,7 +3,7 @@ package com.gerenciadorDeTarefas.services;
 import java.time.LocalDate;
 import java.util.Set;
 
-import com.gerenciadorDeTarefas.entities.Tarefa;
+import com.gerenciadorDeTarefas.model.entities.Tarefa;
 
 public class TarefaService {
 
