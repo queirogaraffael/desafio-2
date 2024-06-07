@@ -1,6 +1,9 @@
 package com.gerenciadorDeTarefas.MongoDB;
 
+import javax.swing.JOptionPane;
+
 import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
@@ -10,14 +13,27 @@ public class MongoDBConnection {
 
 	public static MongoClient getMongoClient() {
 		if (mongoClient == null) {
-			mongoClient = MongoClients.create(new ConnectionString(connectionString));
+
+			try {
+				mongoClient = MongoClients.create(new ConnectionString(connectionString));
+
+			} catch (MongoClientException erro) {
+				JOptionPane.showMessageDialog(null, "Erro ao tentar se conectar com o servido MongoClient: " + erro);
+			}
+
 		}
 		return mongoClient;
+
 	}
 
 	public static void close() {
 		if (mongoClient != null) {
-			mongoClient.close();
+			try {
+				mongoClient.close();
+			} catch (MongoClientException erro) {
+				JOptionPane.showMessageDialog(null, "Erro ao tentar fechar conexao com o MongoClient: " + erro);
+			}
+
 		}
 	}
 

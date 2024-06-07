@@ -5,7 +5,7 @@ import com.gerenciadorDeTarefas.model.dao.imp.TarefaDaoMongoDB;
 
 public class DaoFactory {
 
-	public static TarefaDao createMedicoDao() {
+	public static TarefaDao createMedicoDao() throws Exception {
 
 		return new TarefaDaoMongoDB(MongoDBConnection.getMongoClient());
 

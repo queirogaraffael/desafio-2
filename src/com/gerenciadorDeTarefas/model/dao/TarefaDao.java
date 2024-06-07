@@ -6,22 +6,27 @@ import com.gerenciadorDeTarefas.model.entities.Tarefa;
 
 public interface TarefaDao {
 
-	void insereTarefa(Tarefa tarefa);
+	void insereTarefa(String id, Tarefa tarefa) throws Exception;
 
-	Tarefa retornaTarefaPeloId(String id);
+	String retornaIdTituloStatusDataTarefas() throws Exception;
 
-	List<Tarefa> retornaTarefasNaoConcluidas();
+	Tarefa retornaTarefaPeloId(String id) throws Exception;
 
-	List<Tarefa> retornaTarefasConcluidas();
+	List<Tarefa> retornaTarefasNaoConcluidas() throws Exception;
 
-	void marcaTarefaComoConcluidaPeloId(String id);
+	List<Tarefa> retornaTarefasConcluidas() throws Exception;
 
-	void dermarcaTarefaComoConcluidaPeloId(String id);
+	void marcaTarefaComoConcluidaPeloId(String id) throws Exception;
 
-	void modificaDescricaoTarefaPeloId(String id);
+	void dermarcaTarefaComoConcluidaPeloId(String id) throws Exception;
 
-	void modificaDataTarefaPeloId(String id);
+	void modificaDescricaoTarefaPeloId(Tarefa tarefa, String novaDescricao) throws Exception;
 
-	void deleteTarefa(String id);
+	void modificaDataTarefaPeloId(Tarefa tarefa, String novaData) throws Exception;
 
+	void deleteTarefa(String id) throws Exception;
+
+	Long retornaNumeroDeTarefas() throws Exception;
+
+	boolean verificaSeJaTemId(String id) throws Exception;
 }
