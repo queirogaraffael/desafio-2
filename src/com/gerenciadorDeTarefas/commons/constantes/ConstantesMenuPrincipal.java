@@ -8,6 +8,7 @@ public class ConstantesMenuPrincipal {
 	public static final String VISUALIZAR_NAO_CONCLUIDA = "Visualizar Tarefas nao concluidas";
 	public static final String VISUALIZAR_CONCLUIDA = "Visualizar tarefas concluidas";
 	public static final String MARCAR_CONCLUIDA = "Marcar tarefa como concluida";
+	public static final String MARCAR_CONCLUIDA_PELA_DATA = "Marca tarefas como concluidas pela data";
 	public static final String DESMARCAR_CONCLUIDA = "Desmarcar tarefa como concluida";
 	public static final String MODIFICAR = "Modificar tarefa";
 	public static final String REMOVER = "Remover Tarefa";

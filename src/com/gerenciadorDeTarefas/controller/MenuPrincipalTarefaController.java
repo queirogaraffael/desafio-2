@@ -1,7 +1,5 @@
 package com.gerenciadorDeTarefas.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -10,16 +8,14 @@ import com.gerenciadorDeTarefas.MongoDB.MongoDBConnection;
 import com.gerenciadorDeTarefas.commons.constantes.ConstantesMenuPrincipal;
 import com.gerenciadorDeTarefas.commons.constantes.ConstantesOpcaoModificarTarefa;
 import com.gerenciadorDeTarefas.commons.util.ComparadorData;
+import com.gerenciadorDeTarefas.commons.util.Data;
 import com.gerenciadorDeTarefas.commons.util.GeraRelatorioTarefas;
-import com.gerenciadorDeTarefas.commons.util.VerificaFormatoData;
 import com.gerenciadorDeTarefas.model.dao.DaoFactory;
 import com.gerenciadorDeTarefas.model.dao.TarefaDao;
 import com.gerenciadorDeTarefas.model.entities.Tarefa;
 import com.gerenciadorDeTarefas.view.GerenciadorTarefasView;
 
 public class MenuPrincipalTarefaController {
-
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private TarefaDao tarefaDao;
 
@@ -63,6 +59,10 @@ public class MenuPrincipalTarefaController {
 					marcaTarefaComoConcluida();
 					break;
 
+				case (ConstantesMenuPrincipal.MARCAR_CONCLUIDA_PELA_DATA):
+					marcaComoConcluidaPelaData();
+					break;
+
 				case (ConstantesMenuPrincipal.DESMARCAR_CONCLUIDA):
 					desmarcaTarefaComoConcluida();
 					break;
@@ -99,180 +99,199 @@ public class MenuPrincipalTarefaController {
 			String titulo = JOptionPane.showInputDialog("Titulo da tarefa: ");
 			String descricao = JOptionPane.showInputDialog("Descricao da tarefa: ");
 
-			Object[] opcoes = { "Sim", "Nao" };
-
-			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar uma data especifica ?", "Data",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
-
 			Tarefa tarefa = new Tarefa();
 			tarefa.setTitulo(titulo);
 			tarefa.setDescricao(descricao);
 			tarefa.setStatus(false);
 
-			if (opcaoData == 0) {
-				String formatoData = "dd/MM/yyyy";
-				String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-				boolean formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
-
-				while (!formatoAprovado) {
-					JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
-					dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-					formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
-				}
-				tarefa.setData(dataString);
-
-			} else {
-				tarefa.setData(LocalDate.now().format(formatter));
-			}
+			Data.solicitarDataValida(tarefa);
 
 			tarefaDao.insereTarefa(idTarefa, tarefa);
 
 			JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
 
 		}
+
 	}
 
 	private void visualizaIdTituloDataStatusTarefas() throws Exception {
 
-		String relatorio = tarefaDao.retornaIdTituloStatusDataTarefas();
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
+		} else {
+			String relatorio = tarefaDao.retornaIdTituloStatusDataTarefas();
 
-		JOptionPane.showMessageDialog(null, relatorio);
+			JOptionPane.showMessageDialog(null, relatorio);
+		}
 
 	}
 
 	private void visualizaTarefaPeloId() throws Exception {
 
-		String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
-
-		Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
-
-		if (tarefa == null) {
-			JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
 		} else {
+			String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
 
-			JOptionPane.showMessageDialog(null, tarefa);
+			Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
 
+			if (tarefa == null) {
+				JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+			} else {
+
+				JOptionPane.showMessageDialog(null, tarefa);
+
+			}
 		}
 
 	}
 
 	private void visualizaTarefasNaoConcluidas() throws Exception {
 
-		List<Tarefa> tarefasNaoConcluidas = tarefaDao.retornaTarefasNaoConcluidas();
-
-		if (tarefasNaoConcluidas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Lista de tarefas nao concluidas vazia.");
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
 		} else {
+			List<Tarefa> tarefasNaoConcluidas = tarefaDao.retornaTarefasNaoConcluidas();
 
-			tarefasNaoConcluidas.sort(new ComparadorData());
+			if (tarefasNaoConcluidas.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Lista de tarefas nao concluidas vazia.");
+			} else {
 
-			String relatorioTarefasNaoConcluidas = GeraRelatorioTarefas.geraRelatorioTarefas(tarefasNaoConcluidas);
+				tarefasNaoConcluidas.sort(new ComparadorData());
 
-			JOptionPane.showMessageDialog(null, relatorioTarefasNaoConcluidas);
+				String relatorioTarefasNaoConcluidas = GeraRelatorioTarefas.geraRelatorioTarefas(tarefasNaoConcluidas);
+
+				JOptionPane.showMessageDialog(null, relatorioTarefasNaoConcluidas);
+			}
 		}
 
 	}
 
 	private void visualizaTarefasConcluidas() throws Exception {
 
-		List<Tarefa> tarefasConcluidas = tarefaDao.retornaTarefasConcluidas();
-
-		if (tarefasConcluidas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Lista de tarefas concluidas vazia.");
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
 		} else {
-			tarefasConcluidas.sort(new ComparadorData());
+			List<Tarefa> tarefasConcluidas = tarefaDao.retornaTarefasConcluidas();
 
-			String relatorioTarefasConcluidas = GeraRelatorioTarefas.geraRelatorioTarefas(tarefasConcluidas);
+			if (tarefasConcluidas.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Lista de tarefas concluidas vazia.");
+			} else {
+				tarefasConcluidas.sort(new ComparadorData());
 
-			JOptionPane.showMessageDialog(null, relatorioTarefasConcluidas);
+				String relatorioTarefasConcluidas = GeraRelatorioTarefas.geraRelatorioTarefas(tarefasConcluidas);
+
+				JOptionPane.showMessageDialog(null, relatorioTarefasConcluidas);
+			}
 		}
 
 	}
 
 	private void marcaTarefaComoConcluida() throws Exception {
 
-		String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
-
-		Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
-
-		if (tarefa == null) {
-			JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
 		} else {
+			String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
 
-			tarefaDao.marcaTarefaComoConcluidaPeloId(idTarefa);
-			JOptionPane.showMessageDialog(null, "Tarefa marcada como conluida!");
+			Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
 
+			if (tarefa == null) {
+				JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+			} else {
+
+				tarefaDao.marcaTarefaComoConcluidaPeloId(idTarefa);
+				JOptionPane.showMessageDialog(null, "Tarefa marcada como concluida com sucesso!");
+
+			}
+		}
+
+	}
+
+	private void marcaComoConcluidaPelaData() throws Exception {
+
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
+		} else {
+			tarefaDao.marcaComoConcluidaPelaData();
+			JOptionPane.showMessageDialog(null, "Tarefas marcadas como concluida com sucesso!");
 		}
 
 	}
 
 	private void desmarcaTarefaComoConcluida() throws Exception {
 
-		String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
-
-		Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
-
-		if (tarefa == null) {
-			JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas!");
 		} else {
+			String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
 
-			tarefaDao.dermarcaTarefaComoConcluidaPeloId(idTarefa);
-			JOptionPane.showMessageDialog(null, "Tarefa desmarcada como conluida!");
+			Tarefa tarefa = tarefaDao.retornaTarefaPeloId(idTarefa);
 
+			if (tarefa == null) {
+				JOptionPane.showMessageDialog(null, "Tarefa nao encontrada!");
+			} else {
+
+				tarefaDao.dermarcaTarefaComoConcluidaPeloId(idTarefa);
+				JOptionPane.showMessageDialog(null, "Tarefa desmarcada como conluida!");
+
+			}
 		}
 
 	}
 
 	public void modificaTarefa() throws Exception {
-		Object[] opcoes = { "Descricao", "Data", "Voltar para o menu principal" };
 
-		int opcaoModificar = JOptionPane.showOptionDialog(null, "Deseja modificar qual campo ?", "Modificar",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas para poder modificar!");
+		} else {
+			Object[] opcoes = { "Descricao", "Data", "Voltar para o menu principal" };
 
-		if (opcaoModificar != ConstantesOpcaoModificarTarefa.VOLTAR) {
+			int opcaoModificar = JOptionPane.showOptionDialog(null, "Deseja modificar qual campo ?", "Modificar",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
-			String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
+			if (opcaoModificar != ConstantesOpcaoModificarTarefa.VOLTAR) {
 
-			Tarefa tarefaParaModificacao = tarefaDao.retornaTarefaPeloId(idTarefa);
+				String idTarefa = JOptionPane.showInputDialog("Digite o ID da tarefa: ");
 
-			if (tarefaParaModificacao != null) {
+				Tarefa tarefaParaModificacao = tarefaDao.retornaTarefaPeloId(idTarefa);
 
-				if (opcaoModificar == ConstantesOpcaoModificarTarefa.DESCRICAO) {
+				if (tarefaParaModificacao != null) {
 
-					String novaDescricao = JOptionPane.showInputDialog("Digite a nova descricao da tarefa: ");
-					tarefaDao.modificaDescricaoTarefaPeloId(tarefaParaModificacao, novaDescricao);
+					if (opcaoModificar == ConstantesOpcaoModificarTarefa.DESCRICAO) {
 
-				} else if (opcaoModificar == ConstantesOpcaoModificarTarefa.DATA) {
-					String formatoData = "dd/MM/yyyy";
-					String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-					boolean formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
+						String novaDescricao = JOptionPane.showInputDialog("Digite a nova descricao da tarefa: ");
+						tarefaDao.modificaDescricaoTarefaPeloId(tarefaParaModificacao, novaDescricao);
 
-					while (!formatoAprovado) {
-						JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
-						dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-						formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
+					} else if (opcaoModificar == ConstantesOpcaoModificarTarefa.DATA) {
+						Data.solicitarDataValida(tarefaParaModificacao);
+						tarefaDao.modificaDataTarefaPeloId(tarefaParaModificacao,
+								tarefaParaModificacao.getDataString());
+
 					}
+					JOptionPane.showMessageDialog(null, "Modificacao feita com sucesso!");
 
-					tarefaDao.modificaDataTarefaPeloId(tarefaParaModificacao, dataString);
+				} else {
+					JOptionPane.showMessageDialog(null, "Tarefa nao encontrada para modificacao.");
 
 				}
-				JOptionPane.showMessageDialog(null, "Modificacao feita com sucesso!");
-
-			} else {
-				JOptionPane.showMessageDialog(null, "Tarefa nao encontrada para modificacao.");
 
 			}
-
 		}
 
 	}
 
 	private void removeTarefa() throws Exception {
-		String idTarefaParaRemover = JOptionPane.showInputDialog("Digite o ID da tarefa que voce deseja remover: ");
 
-		tarefaDao.deleteTarefa(idTarefaParaRemover);
+		if (tarefaDao.retornaNumeroDeTarefas() == 0) {
+			JOptionPane.showMessageDialog(null, "Adicione primeiro tarefas para poder remover!");
+		} else {
+			String idTarefaParaRemover = JOptionPane.showInputDialog("Digite o ID da tarefa que voce deseja remover: ");
+			tarefaDao.deleteTarefa(idTarefaParaRemover);
 
-		JOptionPane.showMessageDialog(null, "Tarefa removida com sucesso!");
+			JOptionPane.showMessageDialog(null, "Tarefa removida com sucesso!");
+		}
+
 	}
 
 }

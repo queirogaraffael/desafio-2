@@ -29,4 +29,6 @@ public interface TarefaDao {
 	Long retornaNumeroDeTarefas() throws Exception;
 
 	boolean verificaSeJaTemId(String id) throws Exception;
+
+	void marcaComoConcluidaPelaData() throws Exception;
 }

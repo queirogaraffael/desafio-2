@@ -7,7 +7,7 @@ public class GerenciadorTarefasView {
 	public static String menuPrincipalView() {
 
 		Object[] opcoesMenu = { "Adicionar Tarefa", "Visualizar resumo tarefas", "Retornar tarefa pelo ID","Visualizar Tarefas nao concluidas",
-				"Visualizar tarefas concluidas", "Marcar tarefa como concluida", "Desmarcar tarefa como concluida",
+				"Visualizar tarefas concluidas", "Marcar tarefa como concluida", "Marca tarefas como concluidas pela data" ,"Desmarcar tarefa como concluida",
 				"Modificar tarefa", "Remover Tarefa", "Sair" };
 
 		Object opcaoSelecionada = JOptionPane.showInputDialog(null, "Escolha uma opcao", "Mene Principal",

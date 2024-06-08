@@ -52,6 +52,10 @@ public class Tarefa {
 	public LocalDate getData() {
 		return data;
 	}
+	
+	public String getDataString() {
+		return data.format(formatter);
+	}
 
 	public void setData(String data) {
 

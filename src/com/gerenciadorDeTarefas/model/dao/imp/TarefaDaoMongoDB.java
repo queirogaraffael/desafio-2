@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bson.Document;
 
+import com.gerenciadorDeTarefas.commons.util.Data;
 import com.gerenciadorDeTarefas.model.dao.TarefaDao;
 import com.gerenciadorDeTarefas.model.entities.Tarefa;
 import com.mongodb.client.MongoClient;
@@ -143,6 +144,20 @@ public class TarefaDaoMongoDB implements TarefaDao {
 	public boolean verificaSeJaTemId(String id) throws Exception {
 		Document existingDoc = collection.find(Filters.eq("_id", id)).first();
 		return existingDoc != null;
+	}
+
+	@Override
+	public void marcaComoConcluidaPelaData() throws Exception {
+		for (Document doc : collection.find()) {
+
+			if (Data.dataJaPassou(doc.getString("data"))) {
+
+				Document filterDocument = new Document("_id", doc.getString("_id"));
+				Document updateDoc = new Document("$set", new Document("status", true));
+				collection.updateOne(filterDocument, updateDoc);
+			}
+		}
+
 	}
 
 }
