@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class ManipulacaoData {
+public class VerificaFormatoData {
 
 	public static boolean verificaFormatoData(String stringData, String formatoData) {
 		try {
@@ -16,12 +16,6 @@ public class ManipulacaoData {
 			return false;
 		}
 
-	}
-
-	public static LocalDate retornaLocalDate(String data) {
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-		return LocalDate.parse(data, formato);
 	}
 
 }

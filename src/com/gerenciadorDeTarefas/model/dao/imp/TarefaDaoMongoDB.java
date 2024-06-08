@@ -1,6 +1,6 @@
 package com.gerenciadorDeTarefas.model.dao.imp;
 
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +14,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 public class TarefaDaoMongoDB implements TarefaDao {
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private final MongoCollection<Document> collection;
 
@@ -25,34 +26,25 @@ public class TarefaDaoMongoDB implements TarefaDao {
 	@Override
 	public void insereTarefa(String id, Tarefa tarefa) throws Exception {
 		Document doc = new Document("_id", id).append("titulo", tarefa.getTitulo())
-				.append("descricao", tarefa.getDescricao()).append("data", tarefa.getData().toString())
-				.append("statusConcluida", tarefa.getStatusConcluida());
+				.append("descricao", tarefa.getDescricao()).append("data", tarefa.getData().format(formatter))
+				.append("status", tarefa.getStatus());
 		collection.insertOne(doc);
 	}
 
 	@Override
 	public String retornaIdTituloStatusDataTarefas() throws Exception {
-		String dados = "";
+		StringBuilder sb = new StringBuilder();
 
 		for (Document doc : collection.find()) {
-			String id = doc.getString("_id");
-			String titulo = doc.getString("titulo");
-			LocalDate data = LocalDate.parse(doc.getString("data"));
-			String status;
 
-			if (doc.getBoolean("statusConcluida") == true) {
-				status = "concluida";
-			} else {
-				status = "nao concluida";
-			}
+			Tarefa tarefa = new Tarefa(doc.getString("_id"), doc.getString("titulo"), null, doc.getString("data"),
+					doc.getBoolean("status"));
 
-			StringBuilder sb = new StringBuilder();
-			sb.append("Id: " + id + ", Titulo: " + titulo + ", Data: " + data.toString() + ", Status: " + status);
-
-			dados += sb.toString() + "\n";
+			sb.append("Id: " + tarefa.getId() + ", Titulo: " + tarefa.getTitulo() + ", Data: "
+					+ tarefa.getData().format(formatter) + ", Status: " + tarefa.retornaStatusFormatado()).append("\n");
 
 		}
-		return dados;
+		return sb.toString();
 
 	}
 
@@ -64,7 +56,7 @@ public class TarefaDaoMongoDB implements TarefaDao {
 			if (doc.getString("_id").equals(id)) {
 
 				Tarefa tarefa = new Tarefa(doc.getString("_id"), doc.getString("titulo"), doc.getString("descricao"),
-						LocalDate.parse(doc.getString("data")), doc.getBoolean("statusConcluida"));
+						doc.getString("data"), doc.getBoolean("status"));
 
 				return tarefa;
 			}
@@ -78,10 +70,10 @@ public class TarefaDaoMongoDB implements TarefaDao {
 		List<Tarefa> tarefas = new ArrayList<>();
 		for (Document doc : collection.find()) {
 
-			if (doc.getBoolean("statusConcluida") == false) {
+			if (doc.getBoolean("status") == false) {
 
 				tarefas.add(new Tarefa(doc.getString("_id"), doc.getString("titulo"), doc.getString("descricao"),
-						LocalDate.parse(doc.getString("data")), doc.getBoolean("statusConcluida")));
+						doc.getString("data"), doc.getBoolean("status")));
 			}
 		}
 
@@ -93,9 +85,9 @@ public class TarefaDaoMongoDB implements TarefaDao {
 		List<Tarefa> tarefas = new ArrayList<>();
 		for (Document doc : collection.find()) {
 
-			if (doc.getBoolean("statusConcluida") == true) {
-				new Tarefa(doc.getString("_id"), doc.getString("titulo"), doc.getString("descricao"),
-						LocalDate.parse(doc.getString("data")), doc.getBoolean("statusConcluida"));
+			if (doc.getBoolean("status") == true) {
+				tarefas.add(new Tarefa(doc.getString("_id"), doc.getString("titulo"), doc.getString("descricao"),
+						doc.getString("data"), doc.getBoolean("status")));
 			}
 
 		}
@@ -105,7 +97,7 @@ public class TarefaDaoMongoDB implements TarefaDao {
 	@Override
 	public void marcaTarefaComoConcluidaPeloId(String id) throws Exception {
 		Document filterDocument = new Document("_id", id);
-		Document updateDoc = new Document("$set", new Document("statusConcluida", true));
+		Document updateDoc = new Document("$set", new Document("status", true));
 		collection.updateOne(filterDocument, updateDoc);
 
 	}
@@ -113,7 +105,7 @@ public class TarefaDaoMongoDB implements TarefaDao {
 	@Override
 	public void dermarcaTarefaComoConcluidaPeloId(String id) throws Exception {
 		Document filterDocument = new Document("_id", id);
-		Document updateDoc = new Document("$set", new Document("statusConcluida", false));
+		Document updateDoc = new Document("$set", new Document("status", false));
 		collection.updateOne(filterDocument, updateDoc);
 
 	}
@@ -129,6 +121,7 @@ public class TarefaDaoMongoDB implements TarefaDao {
 	public void modificaDataTarefaPeloId(Tarefa tarefa, String novaData) throws Exception {
 
 		Document filterDocument = new Document("_id", tarefa.getId());
+
 		Document updateDoc = new Document("$set", new Document("data", novaData));
 		collection.updateOne(filterDocument, updateDoc);
 

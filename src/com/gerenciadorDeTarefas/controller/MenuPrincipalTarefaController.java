@@ -1,6 +1,7 @@
 package com.gerenciadorDeTarefas.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -10,13 +11,15 @@ import com.gerenciadorDeTarefas.commons.constantes.ConstantesMenuPrincipal;
 import com.gerenciadorDeTarefas.commons.constantes.ConstantesOpcaoModificarTarefa;
 import com.gerenciadorDeTarefas.commons.util.ComparadorData;
 import com.gerenciadorDeTarefas.commons.util.GeraRelatorioTarefas;
-import com.gerenciadorDeTarefas.commons.util.ManipulacaoData;
+import com.gerenciadorDeTarefas.commons.util.VerificaFormatoData;
 import com.gerenciadorDeTarefas.model.dao.DaoFactory;
 import com.gerenciadorDeTarefas.model.dao.TarefaDao;
 import com.gerenciadorDeTarefas.model.entities.Tarefa;
 import com.gerenciadorDeTarefas.view.GerenciadorTarefasView;
 
 public class MenuPrincipalTarefaController {
+
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private TarefaDao tarefaDao;
 
@@ -78,7 +81,6 @@ public class MenuPrincipalTarefaController {
 				}
 
 			} catch (Exception erro) {
-				System.out.println(erro.getLocalizedMessage());
 				JOptionPane.showMessageDialog(null, "Erro: " + erro.getMessage());
 			}
 
@@ -99,34 +101,34 @@ public class MenuPrincipalTarefaController {
 
 			Object[] opcoes = { "Sim", "Nao" };
 
-			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar data na tarefa ?", "Data",
+			int opcaoData = JOptionPane.showOptionDialog(null, "Deseja adicionar uma data especifica ?", "Data",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
 			Tarefa tarefa = new Tarefa();
 			tarefa.setTitulo(titulo);
 			tarefa.setDescricao(descricao);
-			tarefa.setStatusConcluida(false);
+			tarefa.setStatus(false);
 
 			if (opcaoData == 0) {
 				String formatoData = "dd/MM/yyyy";
 				String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-				boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+				boolean formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
 
 				while (!formatoAprovado) {
 					JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
 					dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-					formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+					formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
 				}
-				LocalDate localDate = ManipulacaoData.retornaLocalDate(dataString);
-				tarefa.setData(localDate);
+				tarefa.setData(dataString);
 
 			} else {
-				tarefa.setData(null);
+				tarefa.setData(LocalDate.now().format(formatter));
 			}
 
 			tarefaDao.insereTarefa(idTarefa, tarefa);
 
 			JOptionPane.showMessageDialog(null, "Tarefa adicionada com sucesso!");
+
 		}
 	}
 
@@ -243,12 +245,12 @@ public class MenuPrincipalTarefaController {
 				} else if (opcaoModificar == ConstantesOpcaoModificarTarefa.DATA) {
 					String formatoData = "dd/MM/yyyy";
 					String dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-					boolean formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+					boolean formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
 
 					while (!formatoAprovado) {
 						JOptionPane.showMessageDialog(null, "Formato da data incorreto. Tente novamente!");
 						dataString = JOptionPane.showInputDialog("Digite uma data no formato dd/MM/yyyy");
-						formatoAprovado = ManipulacaoData.verificaFormatoData(dataString, formatoData);
+						formatoAprovado = VerificaFormatoData.verificaFormatoData(dataString, formatoData);
 					}
 
 					tarefaDao.modificaDataTarefaPeloId(tarefaParaModificacao, dataString);
@@ -269,6 +271,8 @@ public class MenuPrincipalTarefaController {
 		String idTarefaParaRemover = JOptionPane.showInputDialog("Digite o ID da tarefa que voce deseja remover: ");
 
 		tarefaDao.deleteTarefa(idTarefaParaRemover);
+
+		JOptionPane.showMessageDialog(null, "Tarefa removida com sucesso!");
 	}
 
 }

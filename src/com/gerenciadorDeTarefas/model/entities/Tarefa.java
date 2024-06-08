@@ -1,9 +1,12 @@
 package com.gerenciadorDeTarefas.model.entities;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Tarefa {
+
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private String id;
 	private String titulo;
@@ -14,11 +17,11 @@ public class Tarefa {
 	public Tarefa() {
 	}
 
-	public Tarefa(String id, String titulo, String descricao, LocalDate data, Boolean status) {
+	public Tarefa(String id, String titulo, String descricao, String data, Boolean status) {
 		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-		this.data = data;
+		this.data = LocalDate.parse(data, formatter);
 		this.status = status;
 	}
 
@@ -50,16 +53,25 @@ public class Tarefa {
 		return data;
 	}
 
-	public void setData(LocalDate data) {
-		this.data = data;
+	public void setData(String data) {
+
+		this.data = LocalDate.parse(data, formatter);
 	}
 
-	public Boolean getstatus() {
+	public Boolean getStatus() {
 		return status;
 	}
 
-	public void setstatus(Boolean status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public String retornaStatusFormatado() {
+		if (status == true) {
+			return "concluida";
+		} else {
+			return "inconcluida";
+		}
 	}
 
 	@Override
@@ -67,13 +79,13 @@ public class Tarefa {
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("Titulo: ").append(titulo).append("\n").append("Descricao: ").append(descricao);
+		sb.append("Titulo: ").append(titulo).append("\n").append("Descricao: ").append(descricao).append("\n");
 
 		if (data != null) {
-			sb.append("\n").append("Data: ").append(data.toString()).toString();
+			sb.append("Data: ").append(data.format(formatter)).append("\n");
 		}
-		
-		sb.append("\n").append("Status: ").append(status);
+
+		sb.append("Status: ").append(retornaStatusFormatado());
 
 		return sb.toString();
 
